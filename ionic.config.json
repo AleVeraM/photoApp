@@ -1,0 +1,8 @@
+{
+  "name": "photoApp",
+  "app_id": "78f804a6",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
