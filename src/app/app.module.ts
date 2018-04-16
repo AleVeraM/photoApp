@@ -22,6 +22,9 @@ import { ImagePicker } from '@ionic-native/image-picker';
 // Pipe
 import {PipesModule} from "../pipes/pipes.module";
 
+// Servicios
+import { CargaArchivoProvider } from '../providers/carga-archivo/carga-archivo';
+
 export const firebaseConfig = {
   apiKey: "AIzaSyDpgXIGwxoUOen6iMJ7Rm9MRyhrNedAnmk",
   authDomain: "photoapp-12332.firebaseapp.com",
@@ -57,7 +60,8 @@ export const firebaseConfig = {
     AngularFireDatabase,
     Camera,
     ImagePicker,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CargaArchivoProvider
   ]
 })
 export class AppModule {

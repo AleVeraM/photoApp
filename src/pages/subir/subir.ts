@@ -3,6 +3,7 @@ import {ViewController, ToastController} from 'ionic-angular';
 
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {ImagePicker, ImagePickerOptions} from '@ionic-native/image-picker';
+import {CargaArchivoProvider} from "../../providers/carga-archivo/carga-archivo";
 
 @Component({
   selector: 'page-subir',
@@ -12,12 +13,14 @@ export class SubirPage {
 
   titulo: string;
   imagenPreview: string;
+  imagen64: string;
 
 
   constructor(private viewCtrl: ViewController,
               private camera: Camera,
               private imagePicker: ImagePicker,
-              private toastCtrl: ToastController) {
+              private toastCtrl: ToastController,
+              public _cap: CargaArchivoProvider) {
   }
 
 
@@ -39,6 +42,7 @@ export class SubirPage {
       // imageData is either a base64 encoded string or a file URI
       // If it's base64:
       this.imagenPreview = 'data:image/jpeg;base64,' + imageData;
+      this.imagen64 = imageData;
     }, (err) => {
       this.presentToast(err);
       console.error("Error en cámara", JSON.stringify(err));
@@ -58,6 +62,7 @@ export class SubirPage {
       for (var i = 0; i < results.length; i++) {
         //console.log('Image URI: ' + results[i]);
         this.imagenPreview = 'data:image/jpeg;base64,' + results[i];
+        this.imagen64 = results[i];
       }
 
     }, (err) => {
@@ -65,6 +70,16 @@ export class SubirPage {
       console.error("Error en la Seleccion", JSON.stringify(err));
     });
   }
+
+  crear_post(){
+    let archivo = {
+      img: this.imagen64,
+      titulo: this.titulo
+    }
+
+    this._cap.cargar_imagen_firebase(archivo);
+  }
+
 
   presentToast(mensaje: string) {
     let toast = this.toastCtrl.create({
