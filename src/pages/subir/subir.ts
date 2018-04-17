@@ -4,6 +4,7 @@ import {ViewController, ToastController} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {ImagePicker, ImagePickerOptions} from '@ionic-native/image-picker';
 import {CargaArchivoProvider} from "../../providers/carga-archivo/carga-archivo";
+import { Base64 } from '@ionic-native/base64';
 
 @Component({
   selector: 'page-subir',
@@ -11,8 +12,8 @@ import {CargaArchivoProvider} from "../../providers/carga-archivo/carga-archivo"
 })
 export class SubirPage {
 
-  titulo: string;
-  imagenPreview: string;
+  titulo: string = "";
+  imagenPreview: string ="";
   imagen64: string;
 
 
@@ -20,9 +21,9 @@ export class SubirPage {
               private camera: Camera,
               private imagePicker: ImagePicker,
               private toastCtrl: ToastController,
-              public _cap: CargaArchivoProvider) {
+              public _cap: CargaArchivoProvider,
+              private base64: Base64) {
   }
-
 
 
   cerrar_modal() {
@@ -39,10 +40,10 @@ export class SubirPage {
     };
 
     this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64:
       this.imagenPreview = 'data:image/jpeg;base64,' + imageData;
       this.imagen64 = imageData;
+      console.log("Imagen sacada por camara");
+      console.log(this.imagenPreview);
     }, (err) => {
       this.presentToast(err);
       console.error("Error en cámara", JSON.stringify(err));
@@ -50,19 +51,30 @@ export class SubirPage {
 
   }
 
-  seleccionar_foto(){
-    let opciones:ImagePickerOptions = {
-      quality: 100,
-      outputType: 1,
-      maximumImagesCount: 1
+  seleccionar_foto() {
 
-    }
+    let opciones: ImagePickerOptions = {
+      quality: 70,
+      outputType: 0,
+      maximumImagesCount: 1
+    };
+
 
     this.imagePicker.getPictures(opciones).then((results) => {
+
+
       for (var i = 0; i < results.length; i++) {
         //console.log('Image URI: ' + results[i]);
-        this.imagenPreview = 'data:image/jpeg;base64,' + results[i];
-        this.imagen64 = results[i];
+        let filePath: string = results[i];
+        console.log(results[i]);
+        this.base64.encodeFile(filePath).then((base64File: string) => {
+          console.log(base64File);
+          this.imagenPreview =  base64File;
+          this.imagen64 = base64File;
+        }, (err) => {
+          console.log(err);
+        });
+
       }
 
     }, (err) => {
@@ -71,13 +83,14 @@ export class SubirPage {
     });
   }
 
-  crear_post(){
+  crear_post() {
     let archivo = {
       img: this.imagen64,
       titulo: this.titulo
-    }
+    };
 
-    this._cap.cargar_imagen_firebase(archivo);
+    this._cap.cargar_imagen_firebase(archivo).then(() => this.cerrar_modal());
+
   }
 
 

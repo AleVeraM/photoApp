@@ -16,6 +16,7 @@ import {AngularFireAuthModule} from 'angularfire2/auth';
 // Plugins
 import {Camera} from '@ionic-native/camera';
 import { ImagePicker } from '@ionic-native/image-picker';
+import { Base64 } from '@ionic-native/base64';
 
 
 
@@ -24,6 +25,7 @@ import {PipesModule} from "../pipes/pipes.module";
 
 // Servicios
 import { CargaArchivoProvider } from '../providers/carga-archivo/carga-archivo';
+
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDpgXIGwxoUOen6iMJ7Rm9MRyhrNedAnmk",
@@ -46,7 +48,8 @@ export const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    PipesModule
+    PipesModule,
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,6 +63,7 @@ export const firebaseConfig = {
     AngularFireDatabase,
     Camera,
     ImagePicker,
+    Base64,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CargaArchivoProvider
   ]

@@ -1,4 +1,3 @@
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ToastController} from "ionic-angular";
 
@@ -6,17 +5,16 @@ import {ToastController} from "ionic-angular";
 import {AngularFireDatabase} from "angularfire2/database";
 import * as firebase from "firebase";
 
-/*
-  Generated class for the CargaArchivoProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class CargaArchivoProvider {
 
-  constructor(public http: HttpClient,
-              private toastCtrl: ToastController) {
+  imagenes: ArchivoSubir[] = [];
+
+
+  constructor(private toastCtrl: ToastController,
+              public afDB: AngularFireDatabase) {
+
     console.log('Hello CargaArchivoProvider Provider');
   }
 
@@ -47,14 +45,37 @@ export class CargaArchivoProvider {
           // Todo bien
           console.log("Archivo subido");
           this.mostrar_toast('Imagen cargada correctamente');
+
+          let url = uploadTask.snapshot.downloadURL;
+
+          this.crear_post(archivo.titulo, url, nombreArchivo);
+
           resolve();
         }
       )
 
 
-    })
+    });
 
     return promesa;
+
+  }
+
+  private crear_post(titulo: string, url: string, nombreArchvio: string) {
+
+    let post: ArchivoSubir =
+      {
+        img: url,
+        titulo: titulo,
+        key: nombreArchvio
+      };
+
+    console.log(JSON.stringify(post));
+    // this.afDB.list(('/post')).push(post);
+    this.afDB.object(`/post/${nombreArchvio}`).update(post); // hacer un then por más seguridad
+
+    this.imagenes.push(post);
+
 
   }
 
