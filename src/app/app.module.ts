@@ -19,12 +19,6 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyDpgXIGwxoUOen6iMJ7Rm9MRyhrNedAnmk",
-  authDomain: "photoapp-12332.firebaseapp.com",
-  databaseURL: "https://photoapp-12332.firebaseio.com",
-  projectId: "photoapp-12332",
-  storageBucket: "photoapp-12332.appspot.com",
-  messagingSenderId: "797717855150"
 };
 
 import { MyApp } from './app.component';
